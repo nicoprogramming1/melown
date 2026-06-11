@@ -1,11 +1,38 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Página-1" id="rjYWv3PAlJO_xErrwxuc">
-    <mxGraphModel dx="1702" dy="414" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1885" dy="501" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="f_1tcGFF32Cuq8rUnuKB-1" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="sds" vertex="1">
-          <mxGeometry height="80" width="80" x="-570" y="310" as="geometry" />
+        <mxCell id="f_1tcGFF32Cuq8rUnuKB-1" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="API Gateway&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;Ratelimiter&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;REST - gRPC&lt;br&gt;x-correlation-id&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 9px;&quot;&gt;loadbalancer&lt;br&gt;routing&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="130" x="-700" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="HTTP" vertex="1">
+          <mxGeometry height="30" width="60" x="-790" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-5" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="catalog-service&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="130" x="-100" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-6" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="identity-service&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="130" x="-100" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-8" parent="1" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" value="KAFKA event bus" vertex="1">
+          <mxGeometry height="80" width="120" x="-340" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-9" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="debezium scrap" vertex="1">
+          <mxGeometry height="30" width="60" x="-260" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-11" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;div&gt;bff&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="130" x="-500" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-12" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;div&gt;db&lt;br&gt;&lt;br&gt;logs db&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="130" x="-270" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="gRPC" vertex="1">
+          <mxGeometry height="30" width="60" x="-530" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="S5U-Q8wM-SqM8KYYFkXt-15" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;div&gt;loki - grafana&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="80" x="-430" y="125" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
