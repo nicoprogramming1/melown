@@ -83,12 +83,6 @@
         <mxCell id="7ewp-oif3Q9LY7BM8-sd-17" edge="1" parent="1" source="S5U-Q8wM-SqM8KYYFkXt-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;" target="7ewp-oif3Q9LY7BM8-sd-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="7ewp-oif3Q9LY7BM8-sd-20" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="sstock-service&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="130" width="130" x="110" y="130" as="geometry" />
-        </mxCell>
-        <mxCell id="7ewp-oif3Q9LY7BM8-sd-21" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="price-service&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="130" width="130" x="110" y="325" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
