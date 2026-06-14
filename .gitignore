@@ -1,0 +1,71 @@
+# === Gradle / Maven ===
+.gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+!gradle/wrapper/gradle-wrapper.jar
+target/
+
+# === Java ===
+*.class
+*.ctxt
+.mtj.tmp/
+hs_err_pid*
+replay_pid*
+
+# === IntelliJ IDEA ===
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# === VS Code / Visual Studio ===
+.vscode/
+.vs/
+*.code-workspace
+
+# === Eclipse / STS ===
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# === NetBeans ===
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# === Spring Boot ===
+HELP.md
+
+# === Logs / temp ===
+*.log
+logs/
+tmp/
+
+# === Env / secrets locales ===
+.env
+.env.*
+!.env.example
+*.local
+
+# === OS ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# === Claude Code (decisión del usuario; ver nota abajo) ===
+.claude
+claude.md
