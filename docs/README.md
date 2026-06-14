@@ -74,17 +74,21 @@ Cada fase tiene un eje de aprendizaje. El orden importa.
 - Pruebas de carga (k6), chaos testing (toxiproxy inyectando latencia y fallos).
 - SLOs documentados por servicio, dashboards en Grafana.
 
-### Fase 5 — Nube y deployment *(2 semanas)* — *eje: que llegue a destino*
-- Kubernetes (`kind` en local) + Helm charts.
+### Fase 5 — Cloud & deployment sobre Compose *(2 semanas)* — *eje: que llegue a destino*
 - **LocalStack** para emular AWS gratis (S3, SQS, Secrets Manager) — pensar AWS como una "DLL".
 - Módulos de Terraform.
 - CI/CD con GitHub Actions.
-- Opcional: deploy a **Oracle Cloud Free Tier** (4 cores ARM + 24 GB RAM gratis para siempre — mejor que el free tier de AWS si querés un cluster k8s de verdad).
+- Deploy del stack con `docker compose` a un host en **Oracle Cloud Free Tier** (4 cores ARM + 24 GB RAM gratis para siempre).
 
-### Fase 6 — Stretch
-- Service mesh (Istio), mTLS en todo el cluster.
-- Pensar multi-región, CDN, edge caching.
+### Fase 6 — Multi-instancia con Kubernetes *(opcional — opt-in según ADR `0003`)* — *eje: orquestación y escalado*
+- `kind` + Helm charts para el stack completo.
+- **Multi-instancia real:** múltiples réplicas por servicio, load balancing L7 para gRPC (headless service + client-side LB, o service mesh). El costo que ADR `0002` señalaba como "diferido" se cobra acá.
+- Service mesh (Linkerd o Istio), mTLS en todo el cluster.
+- Rolling deploys, network policies, autoscaling.
+
+### Fase 7 — Stretch *(opcional)*
 - CQRS con event sourcing completo sobre `orders`.
+- Pensar multi-región, CDN, edge caching.
 
 ---
 
@@ -112,29 +116,60 @@ Este repo se construye con Claude Code en el loop. Lo siguiente va a vivir en `.
 - **gRPC interno + REST externo** suma complejidad. Vale la pena hacerlo una vez para entender los dos lados.
 - **GraphQL acotado a un endpoint en el BFF**, no como API general. La PDP es el caso de uso canónico (fan-out a múltiples servicios, cliente que pide solo los campos que usa, problema clásico del N+1 que se resuelve con DataLoader). Generalizar GraphQL a todo el sistema agrega schema federation, autorización por campo y caching no-trivial — fuera de scope para el aprendizaje inicial.
 - **Saga en lugar de 2PC** es la única opción real en cloud-native; 2PC está prácticamente muerto. El ADR va a explicar por qué.
-- **Kubernetes desde la Fase 5, no desde la Fase 1.** Primero Compose; k8s recién cuando entendamos qué necesitan realmente los contenedores. Adoptar k8s antes de tiempo mata el aprendizaje.
+- **Kubernetes en Phase 6, opcional.** Primero Compose con una réplica por servicio en todas las fases anteriores; K8s entra solo si elegís entrar a la Phase 6, cuyo objetivo es aprender multi-instancia y load balancing L7 para gRPC. Ver ADR `0003`.
 - **Monorepo con Gradle multi-módulo** — más simple para aprender en solitario, un solo CI, refactors atómicos. (Polirepo solo si/cuando los equipos se separen.)
 
 ---
 
 ## Estado del roadmap
 
-- [ ] Fase 0 — Arquitectura en papel
+- [x] Fase 0 — Arquitectura en papel
 - [ ] Fase 1 — Walking skeleton
 - [ ] Fase 2 — Camino de lectura y búsqueda
 - [ ] Fase 3 — Camino de escritura y sagas
 - [ ] Fase 4 — Listo para producción
-- [ ] Fase 5 — Nube y deployment
-- [ ] Fase 6 — Stretch
+- [ ] Fase 5 — Cloud & deployment sobre Compose
+- [ ] Fase 6 — Multi-instancia con Kubernetes *(opcional)*
+- [ ] Fase 7 — Stretch *(opcional)*
 
 ---
 
+## Hasta dónde llegamos
+
+**Fase 0 cerrada.** Los cimientos arquitectónicos que pedía la fase están firmes en `docs/`. Lo que vino antes de cualquier código:
+
+### ADRs aceptados (`docs/adrs/`)
+
+| Nº | Decisión | Fija |
+|---|---|---|
+| `0001` | Protobuf para gRPC, Avro + Schema Registry para Kafka | Formato de contratos sync y async |
+| `0002` | gRPC para todo RPC interno entre servicios | Comunicación sincrónica puertas adentro |
+| `0003` | Diferir Kubernetes a la fase final opcional | Compose-first, una réplica por servicio hasta Phase 6 |
+| `0004` | Monorepo Gradle multi-proyecto con `build-logic` y contratos top-level | Layout físico del repo |
+| `0005` | Hexagonal (Ports & Adapters) con dominio puro + CQRS lightweight | Estructura interna de cada servicio |
+| `0006` | slf4j + Logback JSON + OTel Java Agent + Collector central | Logging, métricas y trazas baseline |
+| `0007` | Patrón Outbox + CDC con Debezium (INSERT-then-DELETE en misma TX) | Mecanismo único de publicación de eventos |
+| `0008` | Spring Authorization Server embebido en `identity` + JWT ES256 + bearer pass-through | Auth, formato de token y propagación al downstream |
+
+### Modelado de dominio
+
+- `docs/architecture/bounded-contexts.md` — primer pase: 4 bounded contexts + 8 eventos canónicos.
+- `c4-diagram.drawio` — diagrama de containers inicial. **Pendiente migrar a Structurizr DSL** (no bloqueante para Fase 1).
+
+### Reglas duras del proyecto (en `CLAUDE.md`)
+
+1. Una base de datos por servicio. Ningún servicio lee la DB de otro.
+2. Patrón Outbox para toda escritura que produce evento. Sin doble escritura.
+3. Consistencia eventual en el read path. Índices downstream del CDC.
+4. Claves de idempotencia en toda operación con side-effect externo.
+5. Arquitectura antes que código. Patrones nuevos requieren ADR primero.
+6. Docker Compose es el default; Kubernetes diferido a Phase 6.
+
+## Pendientes conocidos
+
+- **ADR de Saga vs 2PC para `orders`** — Phase 3. No se redacta todavía: comprometerse a la mecánica sin tener el agregado `Order` modelado en detalle es ADR-por-las-dudas. Entra cuando arranque el Event Storming serio del ciclo de vida de la orden.
+- **Migrar `c4-diagram.drawio` → Structurizr DSL** — tarea de docs, no ADR. Alinea el diagrama con el resto del flujo (texto versionable).
+
 ## Próximo movimiento
 
-Arrancar la **Fase 0**:
-
-1. Escribir los primeros tres ADRs: layout del repo, baseline de Java/Spring, comunicación entre servicios (gRPC + Kafka).
-2. Bosquejar los bounded contexts y el primer diagrama C4 de contenedores en Structurizr DSL.
-3. Redactar el `CLAUDE.md` para que cada sesión futura de código quede alineada con la arquitectura.
-
-Nada de código todavía — solo los cimientos que dejaría un senior.
+Arrancar **Fase 1 — Walking skeleton** (catalog + api-gateway + identity, REST→gRPC sync, evento async vía outbox, traza end-to-end en Tempo, Postgres por servicio con Flyway, Compose). Es donde los ADRs dejan de ser papel y empiezan a doler/validarse.
