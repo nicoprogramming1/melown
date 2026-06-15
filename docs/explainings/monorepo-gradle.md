@@ -397,9 +397,9 @@ include(
   `services/catalog/`". Gradle resuelve el path por convención: dos puntos →
   separador de directorio.
 
-**Por qué NO incluimos `:contracts:catalog`:** no tiene `build.gradle.kts`
-todavía (es un placeholder con solo un README). Cuando aparezca el primer
-`.proto` se agrega.
+**`:contracts-catalog`** se incluye como path single-segment mapeado al
+directorio `contracts/catalog/` vía `project(":contracts-catalog").projectDir`.
+El directorio físico mantiene la agrupación bajo `contracts/`.
 
 ---
 

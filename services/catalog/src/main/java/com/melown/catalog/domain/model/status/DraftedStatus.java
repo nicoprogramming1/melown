@@ -5,25 +5,25 @@ import java.util.Objects;
 
 public record DraftedStatus(Instant expirationAt) implements ProductStatus {
 
-    public DraftedStatus {
-        Objects.requireNonNull(expirationAt, "expirationAt required");
-    }
+  public DraftedStatus {
+    Objects.requireNonNull(expirationAt, "expirationAt required");
+  }
 
-    public Instant expirationAt() {
-        return expirationAt;
-    }
+  public Instant expirationAt() {
+    return expirationAt;
+  }
 
-    public boolean isExpired() {
-        return expirationAt.isBefore(Instant.now());
-    }
+  public boolean isExpired() {
+    return expirationAt.isBefore(Instant.now());
+  }
 
-    @Override
-    public boolean isVisibleInCatalog() {
-        return false;
-    }
+  @Override
+  public boolean isVisibleInCatalog() {
+    return false;
+  }
 
-    @Override
-    public boolean allowsPurchase() {
-        return false;
-    }
+  @Override
+  public boolean allowsPurchase() {
+    return false;
+  }
 }

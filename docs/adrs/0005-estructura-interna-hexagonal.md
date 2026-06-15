@@ -156,7 +156,7 @@ Estas reglas se ejecutan como parte del test suite (`./gradlew test`). Romperlas
 
 - **Tentación de "service como god-class."** En N-tier el `ProductService` termina con 20 métodos. Acá, cada Command/Query es un use case separado con sus propios ports inyectados. Disciplinarse a no crear `ProductService` con 5 métodos diferentes.
 - **Mappers traduciendo "lo mismo a lo mismo."** Si `Product` (domain) y `ProductEntity` (JPA) son 99% iguales, el mapper se siente tonto. Es deuda buena: cuando un día el dominio diverja (ej. nuevo field calculado), el mapper ya está. MapStruct lo hace gratis.
-- **Domain events confundidos con Kafka events.** Los domain events (`domain.event.*`) son Java puro emitido al cambiar el estado del agregado. Los Kafka events son Avro al wire (`:contracts:catalog:avro`). El outbox traduce de uno a otro. No mezclar; no exponer el Avro generado adentro del dominio.
+- **Domain events confundidos con Kafka events.** Los domain events (`domain.event.*`) son Java puro emitido al cambiar el estado del agregado. Los Kafka events son Avro al wire (`:contracts-catalog` con sources `.avsc`). El outbox traduce de uno a otro. No mezclar; no exponer el Avro generado adentro del dominio.
 - **CQRS confundido con event sourcing.** Acá CQRS es solo **naming** (Command/Query). No hay event store, no hay proyecciones materializadas por replay. Event sourcing es Phase 7 stretch (`docs/README.md`).
 - **`ConflictException` vs `BusinessRuleException`** — la distinción retryable/no-retryable es sutil. Documentar con ejemplos en el javadoc de cada una para no confundirlos.
 

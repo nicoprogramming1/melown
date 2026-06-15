@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class CatalogApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CatalogApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(CatalogApplication.class, args);
+  }
 }

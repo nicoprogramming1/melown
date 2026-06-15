@@ -5,26 +5,26 @@ import java.util.Objects;
 
 public record ArchivedStatus(Instant archivedAt, String reason) implements ProductStatus {
 
-    public ArchivedStatus {
-        Objects.requireNonNull(archivedAt, "archivedAt required");
-        Objects.requireNonNull(reason, "reason required");
-    }
+  public ArchivedStatus {
+    Objects.requireNonNull(archivedAt, "archivedAt required");
+    Objects.requireNonNull(reason, "reason required");
+  }
 
-    public Instant archivedAt() {
-        return archivedAt;
-    }
+  public Instant archivedAt() {
+    return archivedAt;
+  }
 
-    public String reason() {
-        return reason;
-    }
+  public String reason() {
+    return reason;
+  }
 
-    @Override
-    public boolean isVisibleInCatalog() {
-        return false;
-    }
+  @Override
+  public boolean isVisibleInCatalog() {
+    return false;
+  }
 
-    @Override
-    public boolean allowsPurchase() {
-        return false;
-    }
+  @Override
+  public boolean allowsPurchase() {
+    return false;
+  }
 }

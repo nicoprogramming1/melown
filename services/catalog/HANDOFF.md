@@ -2,6 +2,17 @@
 
 Estado tras review iterativo #4 (sesión actual). Próxima sesión retoma desde acá.
 
+## Build system (sesión del 2026-06-15 PM)
+
+Estado: **`./gradlew build` pasa verde.** Cambios consolidados:
+
+- **Path Gradle de contratos:** `:contracts-catalog` (no `:contracts-catalog`). Colisión de simple-name con `:services:catalog` causaba ciclo `compileJava → jar → classes → compileJava` con Spring Boot 4 + Gradle 9.5. El módulo sigue viviendo en `contracts/catalog/` (settings.gradle.kts mapea path → directorio).
+- **Spotless** upgradeado `6.25.0 → 7.0.4` (compatibilidad ktlint con Java 21).
+- **`CatalogGrpcService.java` borrado.** Era stub prematuro que referenciaba stubs gRPC inexistentes. Se recrea en el paso 1 del roadmap, **después** del `.proto`.
+- **`CatalogApplicationTests` deshabilitado con `@Disabled`** — `@SpringBootTest` rompe sin datasource configurado. Re-habilitar en el paso 3 del roadmap (Flyway + Testcontainers).
+- **`contracts/catalog/build.gradle.kts`** usa `extensions.getByType<VersionCatalogsExtension>()` para acceder a versiones del catálogo, porque los type-safe accessors `libs.versions.protobuf` colisionan con la extensión homónima del plugin protobuf dentro del script.
+- **`import com.google.protobuf.gradle.id`** requerido en contracts para la DSL `id("grpc") { ... }` adentro de `plugins {}` del bloque protobuf.
+
 ## Veredicto del último review
 
 - `domain/`: **SSr sólido**.

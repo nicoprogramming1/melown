@@ -19,5 +19,6 @@ include(
     ":services:catalog",
     ":services:identity",
     ":services:api-gateway",
-    ":contracts:catalog",
+    ":contracts-catalog",
 )
+project(":contracts-catalog").projectDir = file("contracts/catalog")

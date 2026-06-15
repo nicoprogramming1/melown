@@ -65,16 +65,16 @@ melown/
 
 Estas reglas se documentan en `CLAUDE.md` y se enforcean tanto por convención de PR como por validación en `build-logic` (allowed-dependencies plugin o equivalente cuando aparezca):
 
-- Cualquier `:services:X` **puede** depender de `:contracts:*` (su propio contrato o el de otro servicio).
+- Cualquier `:services:X` **puede** depender de `:contracts-*` (su propio contrato o el de otro servicio).
 - Cualquier `:services:X` **puede** depender de `:libs:*`.
-- Ningún `:services:X` **puede** depender de `:services:Y`. Si A necesita hablar con B, lo hace por gRPC contra `:contracts:B`.
-- `:contracts:shared` no depende de nadie. `:contracts:<servicio>` puede depender de `:contracts:shared`.
-- `:libs:*` no depende de `:services:*` ni de `:contracts:*` (las librerías son infraestructura cross-cutting, no dominio).
+- Ningún `:services:X` **puede** depender de `:services:Y`. Si A necesita hablar con B, lo hace por gRPC contra `:contracts-B`.
+- `:contracts-shared` no depende de nadie. `:contracts-<servicio>` puede depender de `:contracts-shared`.
+- `:libs:*` no depende de `:services:*` ni de `:contracts-*` (las librerías son infraestructura cross-cutting, no dominio).
 
 ### Naming
 
 - Plugin de convención: `melown.<tipo>` (ej: `melown.spring-service`).
-- Module path: `:services:<nombre>`, `:libs:<nombre>`, `:contracts:<nombre>`.
+- Module path: `:services:<nombre>`, `:libs:<nombre>`, `:contracts-<nombre>`.
 - Group ID de artefactos: `com.melown.<modulo>` (ej: `com.melown.catalog`).
 
 ## Consecuencias
@@ -103,7 +103,7 @@ Estas reglas se documentan en `CLAUDE.md` y se enforcean tanto por convención d
 ### Riesgos a vigilar
 
 - **Plugins de convención mal diseñados se vuelven imposibles de cambiar.** Empezar simple: `java-base` con lo mínimo, sumar al `spring-service` solo lo que aparezca repetido en 2+ servicios. No anticipar abstracciones que todavía no se manifestaron.
-- **`:contracts:shared` se vuelve zona caliente.** Si todos los servicios dependen de él, cambiarlo rompe a todos. Mitigación: mantenerlo chiquito (solo tipos primitivos cross-cutting como `Money`, `Address`, IDs), y resistir la tentación de meter ahí eventos de dominio.
+- **`:contracts-shared` se vuelve zona caliente.** Si todos los servicios dependen de él, cambiarlo rompe a todos. Mitigación: mantenerlo chiquito (solo tipos primitivos cross-cutting como `Money`, `Address`, IDs), y resistir la tentación de meter ahí eventos de dominio.
 
 ## Alternativas consideradas
 
@@ -141,7 +141,7 @@ Cada servicio contiene su submódulo de contratos adentro.
 **Por qué perdió:**
 - **Enforcement visual más débil.** Con los contratos viviendo dentro de `services/`, es fácil que un dev (o yo en una sesión futura) se "tiente" con `import com.melown.catalog.domain.Product` directamente. Separar `contracts/` arriba elimina la tentación: el path mismo grita "esto es API pública".
 - En la práctica laboral (compañías tipo MercadoLibre) los contratos suelen vivir top-level o en un repo separado, justamente por esta razón.
-- Trade-off real perdido: contrato y dominio quedan visualmente alejados. Mitigación: convención clara `:services:catalog` ↔ `:contracts:catalog` con el mismo nombre.
+- Trade-off real perdido: contrato y dominio quedan visualmente alejados. Mitigación: convención clara `:services:catalog` ↔ `:contracts-catalog` con el mismo nombre de servicio.
 
 ### Alternativa E: ArchUnit diferido a Fase 4 (production-ready)
 

@@ -222,7 +222,7 @@ stateDiagram-v2
 
 ## Eventos canónicos (catálogo)
 
-Por cada evento: qué representa, payload conceptual (sin Avro todavía — eso lo deciden los `.avsc` en `:contracts:<service>:avro`), garantías de orden, y cómo se asegura la idempotencia en el consumer.
+Por cada evento: qué representa, payload conceptual (sin Avro todavía — eso lo deciden los `.avsc` en `:contracts-<service>`), garantías de orden, y cómo se asegura la idempotencia en el consumer.
 
 Todos los eventos comparten un envelope mínimo: `eventId` (UUID, único), `occurredAt` (timestamp ISO 8601), `producer` (nombre del servicio). Los consumers deben deduplicar por `eventId`.
 
