@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: catalog
+
+grpc:
+  server:
+    port: 9090
+    # opcional: si querés ver detalles en los logs
+    enable-keep-alive: true

@@ -66,6 +66,9 @@ ehthumbs.db
 desktop.ini
 $RECYCLE.BIN/
 
+# === Tooling externo (Copilot Modernize / migraciones IDE) ===
+.github/modernize/
+
 # === Claude Code (decisión del usuario; ver nota abajo) ===
 .claude
 claude.md

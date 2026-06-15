@@ -1,0 +1,54 @@
+[versions]
+# Spring stack
+spring-boot = "4.1.0"
+spring-dependency-management = "1.1.7"
+
+# Runtime libs
+lombok = "1.18.36"
+postgresql = "42.7.4"
+
+# Contratos (pendientes — los plugins se aplican cuando contracts/ tenga IDLs)
+grpc = "1.68.1"
+grpc-spring-boot-starter = "3.1.0.RELEASE"
+protobuf = "3.25.5"
+protobuf-plugin = "0.9.4"
+avro = "1.12.0"
+
+# Test
+junit = "5.11.3"
+archunit = "1.3.0"
+
+# Quality
+spotless = "6.25.0"
+
+[libraries]
+# Runtime
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+
+# gRPC + protobuf — preparados para los .proto en contracts/
+grpc-bom = { module = "io.grpc:grpc-bom", version.ref = "grpc" }
+grpc-netty-shaded = { module = "io.grpc:grpc-netty-shaded" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
+grpc-stub = { module = "io.grpc:grpc-stub" }
+grpc-spring-boot-starter = { module = "net.devh:grpc-server-spring-boot-starter", version.ref = "grpc-spring-boot-starter" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+
+# Avro — preparado para los .avsc en contracts/
+avro = { module = "org.apache.avro:avro", version.ref = "avro" }
+
+# Test
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "archunit" }
+
+# Plugin markers — consumidos por build-logic para poder aplicar plugins por id
+# desde los convention plugins (`id("org.springframework.boot")`, etc.).
+plugin-spring-boot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot" }
+plugin-spring-dependency-management = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "spring-dependency-management" }
+plugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf-plugin" }
