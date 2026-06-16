@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package melown.catalog.v1;
+
+option java_multiple_files = true;
+option java_package = "com.melown.catalog.v1";
+option java_outer_classname = "CatalogProto";
+
+import "google/protobuf/timestamp.proto";
+
+// CatalogService — RPCs internos del catalog. Solo gRPC (REST público vive en
+// api-gateway). Ver ADR 0002.
+//
+// Skeleton mínimo para que se genere CatalogServiceImplBase. Expandir con:
+//   - GetProduct(GetProductRequest)
+//   - PublishProduct / PauseProduct / ArchiveProduct
+//   - SearchProducts (server-streaming)
+service CatalogService {
+
+  // Crea un producto en estado DRAFT. El vendedor lo publica después con PublishProduct.
+  // Idempotente vía idempotency_key (ADR 0007 outbox).
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+}
+
+// Request de creación. Wrappers siempre — permite agregar fields sin breaking change.
+message CreateProductRequest {
+
+  // UUID generado por el cliente para deduplicar reintentos. El use case rechaza
+  // duplicados; ver ADR 0007 (outbox) para el detalle del dedup.
+  string idempotency_key = 1;
+
+  // UUID del vendor. El mapper del adapter lo destruye a UUID antes de pasarlo al dominio.
+  string vendor_id = 2;
+
+  // Título del producto. Invariante: 1..200 chars (validada en el dominio, ver bounded-contexts).
+  string title = 3;
+
+  string description = 4;
+
+  // TODO al expandir:
+  //   - condition (oneof NewCondition | UsedCondition) — representa el sealed ProductCondition.
+  //   - specifications (map<string, string> o tipo dedicado).
+  //   - category_id (string UUID).
+  //   - base_price (mensaje Money custom: int64 amount + string currency).
+}
+
+message CreateProductResponse {
+
+  // UUID del producto recién creado.
+  string product_id = 1;
+
+  // Timestamp de creación (UTC).
+  google.protobuf.Timestamp created_at = 2;
+}

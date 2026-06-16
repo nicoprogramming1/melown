@@ -23,6 +23,10 @@ dependencies {
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)
     implementation(libs.protobuf.java)
+
+    // protoc-gen-grpc-java emite `@javax.annotation.Generated` (retention SOURCE)
+    // que Java 21 ya no provee. compileOnly alcanza.
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
 }
 
 // Versiones desde el catálogo. Acceso vía la API explícita (VersionCatalogsExtension)
