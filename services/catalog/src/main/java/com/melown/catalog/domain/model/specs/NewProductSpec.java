@@ -4,7 +4,7 @@ import com.melown.catalog.domain.model.Specifications;
 import java.util.UUID;
 
 public record NewProductSpec(
-    String name,
+    String title,
     String description,
     Specifications specifications,
     UUID vendorId,

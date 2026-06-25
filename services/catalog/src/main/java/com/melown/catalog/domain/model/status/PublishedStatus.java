@@ -5,21 +5,20 @@ import java.util.Objects;
 
 public record PublishedStatus(Instant publishedAt) implements ProductStatus {
 
-  public PublishedStatus {
-    Objects.requireNonNull(publishedAt, "publishedAt required");
-  }
+    public PublishedStatus {
+        Objects.requireNonNull(publishedAt, "publishedAt required");
+        if (publishedAt.isAfter(Instant.now()))
+            throw new IllegalArgumentException("La fecha no puede ser después de hoy");
+    }
 
-  public Instant publishedAt() {
-    return publishedAt;
-  }
+    @Override
+    public boolean isVisibleInCatalog() {
+        return true;
+    }
 
-  @Override
-  public boolean isVisibleInCatalog() {
-    return true;
-  }
+    @Override
+    public boolean allowsPurchase() {
+        return true;
+    }
 
-  @Override
-  public boolean allowsPurchase() {
-    return true;
-  }
 }

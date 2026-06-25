@@ -24,6 +24,5 @@ dependencies {
     runtimeOnly(libs.grpc.netty.shaded)
 
     // Stubs generados desde los .proto de contracts/catalog
-    // (path :contracts-catalog para evitar colisión de simple-name con :services:catalog)
     implementation(project(":contracts-catalog"))
 }

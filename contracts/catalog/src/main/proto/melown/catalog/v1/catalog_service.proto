@@ -2,24 +2,19 @@ syntax = "proto3";
 
 package melown.catalog.v1;
 
-option java_multiple_files = true;
+option java_multiple_files = true; // crea multiples clases en el generate en vez de un solo archivo
 option java_package = "com.melown.catalog.v1";
 option java_outer_classname = "CatalogProto";
 
 import "google/protobuf/timestamp.proto";
 
-// CatalogService — RPCs internos del catalog. Solo gRPC (REST público vive en
-// api-gateway). Ver ADR 0002.
-//
-// Skeleton mínimo para que se genere CatalogServiceImplBase. Expandir con:
-//   - GetProduct(GetProductRequest)
-//   - PublishProduct / PauseProduct / ArchiveProduct
-//   - SearchProducts (server-streaming)
 service CatalogService {
 
   // Crea un producto en estado DRAFT. El vendedor lo publica después con PublishProduct.
   // Idempotente vía idempotency_key (ADR 0007 outbox).
   rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
 }
 
 // Request de creación. Wrappers siempre — permite agregar fields sin breaking change.
@@ -37,11 +32,24 @@ message CreateProductRequest {
 
   string description = 4;
 
-  // TODO al expandir:
-  //   - condition (oneof NewCondition | UsedCondition) — representa el sealed ProductCondition.
-  //   - specifications (map<string, string> o tipo dedicado).
-  //   - category_id (string UUID).
-  //   - base_price (mensaje Money custom: int64 amount + string currency).
+  ProductConditionProto product_condition = 5;
+
+  map<string, string> specifications = 6;
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message GetProductResponse {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  SpecificationsProto specifications = 4;
+  string vendor_id = 5;
+  ProductConditionProto product_condition = 6;
+  ProductStatusProto product_status = 7;
+  google.protobuf.Timestamp created_at = 9;
 }
 
 message CreateProductResponse {
@@ -50,5 +58,59 @@ message CreateProductResponse {
   string product_id = 1;
 
   // Timestamp de creación (UTC).
-  google.protobuf.Timestamp created_at = 2;
+  // google.protobuf.Timestamp created_at = 2;
+}
+
+message SpecificationsProto {
+  map<string, string> values = 1;
+}
+
+message ProductStatusProto {
+  oneof kind{
+    DraftedStatusProto drafted = 1;
+    PublishedStatusProto published = 2;
+    PausedStatusProto paused = 3;
+    ArchivedStatusProto archived = 4;
+  }
+}
+
+message ArchivedStatusProto {
+  google.protobuf.Timestamp archived_at = 1;
+  string reason = 2;
+}
+
+message PausedStatusProto {
+  string paused_by = 1;
+}
+
+message PublishedStatusProto {
+  google.protobuf.Timestamp published_at = 1;
+}
+
+message DraftedStatusProto {
+  google.protobuf.Timestamp expiration_at = 1;
+  bool isExpired = 2;
+}
+
+message ProductConditionProto {
+  oneof kind{
+    NewConditionProto new = 1;
+    UsedConditionProto used = 2;
+  }
+}
+
+message NewConditionProto {
+  bool guarantee = 1;
+}
+
+message UsedConditionProto {
+  ConditionGradeProto grade = 1;
+  string used_description = 2;
+}
+
+enum ConditionGradeProto {
+  CONDITION_GRADE_UNSPECIFIED = 0;
+  CONDITION_GRADE_PERFECT = 1;
+  CONDITION_GRADE_GOOD = 2;
+  CONDITION_GRADE_BAD = 3;
 }

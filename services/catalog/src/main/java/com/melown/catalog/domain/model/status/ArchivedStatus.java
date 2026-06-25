@@ -5,26 +5,26 @@ import java.util.Objects;
 
 public record ArchivedStatus(Instant archivedAt, String reason) implements ProductStatus {
 
-  public ArchivedStatus {
-    Objects.requireNonNull(archivedAt, "archivedAt required");
-    Objects.requireNonNull(reason, "reason required");
-  }
+    private static final int MIN_LENGTH_REASON = 5;
+    private static final int MAX_LENGTH_REASON = 50;
 
-  public Instant archivedAt() {
-    return archivedAt;
-  }
+    public ArchivedStatus {
+        Objects.requireNonNull(archivedAt, "archivedAt required");
+        Objects.requireNonNull(reason, "reason required");
+        reason = reason.strip();
+        if (reason.isBlank()) throw new IllegalArgumentException("No tiene contenido");
+        if (reason.length() > MAX_LENGTH_REASON) throw new IllegalArgumentException("Muy largo");
+        if (reason.length() < MIN_LENGTH_REASON) throw new IllegalArgumentException("Muy corto");
+        if (archivedAt.isAfter(Instant.now())) throw new IllegalArgumentException("Fecha después de ahora");
+    }
 
-  public String reason() {
-    return reason;
-  }
+    @Override
+    public boolean isVisibleInCatalog() {
+        return false;
+    }
 
-  @Override
-  public boolean isVisibleInCatalog() {
-    return false;
-  }
-
-  @Override
-  public boolean allowsPurchase() {
-    return false;
-  }
+    @Override
+    public boolean allowsPurchase() {
+        return false;
+    }
 }

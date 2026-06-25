@@ -5,7 +5,7 @@ import com.melown.catalog.domain.model.enums.ConditionGrade;
 import java.util.UUID;
 
 public record UsedProductSpec(
-    String name,
+    String title,
     String description,
     Specifications specifications,
     UUID vendorId,
