@@ -9,11 +9,12 @@ import com.melown.catalog.domain.model.specs.NewProductSpec;
 import com.melown.catalog.domain.model.specs.UsedProductSpec;
 
 import java.time.Clock;
+import java.time.Instant;
 import java.util.UUID;
 
 public class ProductConstructor {
 
-    public static Product build(CreateProductCommandKind createProductCommandKind, Clock clock) {
+    public static Product build(CreateProductCommandKind createProductCommandKind, Clock clock, Instant expiredDraftDate) {
 
         UUID vendorId = UUID.fromString("00000000-0000-0000-C000-000000000046");
         Long version = 21L;
@@ -30,7 +31,7 @@ public class ProductConstructor {
                         version
                 );
 
-                yield Product.createNew(newProductSpec, clock);
+                yield Product.createNew(newProductSpec, expiredDraftDate);
             }
             case CreateUsedProductCommand u -> {
 
@@ -44,9 +45,8 @@ public class ProductConstructor {
                         version
                 );
 
-                yield Product.createUsed(usedProductSpec, clock);
+                yield Product.createUsed(usedProductSpec, expiredDraftDate);
             }
         };
     }
-
 }

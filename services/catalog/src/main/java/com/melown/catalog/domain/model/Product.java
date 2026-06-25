@@ -11,6 +11,7 @@ import com.melown.catalog.domain.model.status.ProductStatus;
 import com.melown.catalog.infrastructure.config.ClockConfig;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -45,11 +46,10 @@ public class Product {
         this.auditory = auditory;
     }
 
-    // producto publicado en condición "nuevo"
-    public static Product createNew(NewProductSpec spec, Clock clock) {
+    // producto creado en condición "nuevo"
+    public static Product createNew(NewProductSpec spec, Instant expiredDraftDate) {
 
         ProductId productId = ProductId.create();
-        Instant expiredDraftDate = Instant.now(clock).plus(2, ChronoUnit.DAYS);
         Instant now = Instant.now();
 
         ProductCondition productCondition = new NewCondition(spec.guarantee());
@@ -72,11 +72,10 @@ public class Product {
                 auditory);
     }
 
-    // producto publicado en condición "usado"
-    public static Product createUsed(UsedProductSpec spec, Clock clock) {
+    // producto creado en condición "usado"
+    public static Product createUsed(UsedProductSpec spec, Instant expiredDraftDate) {
 
         ProductId productId = ProductId.create();
-        Instant expiredDraftDate = Instant.now(clock).plus(2, ChronoUnit.DAYS);
         Instant now = Instant.now();
 
         ProductCondition productCondition =

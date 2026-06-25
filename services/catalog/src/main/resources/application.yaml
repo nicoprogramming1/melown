@@ -7,3 +7,7 @@ grpc:
     port: 9090
     # opcional: si querés ver detalles en los logs
     enable-keep-alive: true
+
+catalog:
+  policy:
+    draftTTL: P2D
