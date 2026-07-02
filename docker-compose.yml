@@ -1,0 +1,47 @@
+services:
+  catalog-db:
+    image: postgres:16-alpine
+    ports:
+      - "${PORT_CATALOG_DB}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_CATALOG_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_CATALOG_DB_PASSWORD}
+      POSTGRES_DB: catalog
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - catalog-db-volume:/var/lib/postgresql/data
+    networks:
+      - melown
+  
+  catalog:
+    build:
+      context: .
+      dockerfile: ./services/catalog/Dockerfile
+    ports:
+      - "${PORT_CATALOG_HTTP}:8080"
+      - "${PORT_CATALOG_GRPC}:9090"
+    environment:
+      SPRING_DATASOURCE_URL: ${POSTGRES_CATALOG_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_CATALOG_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_CATALOG_DB_PASSWORD}
+    healthcheck:
+      #test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ] # quizas no esta curl
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health" ] # wget disponible
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s    # ← le da tiempo a la JVM a levantar
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    networks:
+      - melown
+
+networks:
+  melown:
+volumes:
+  catalog-db-volume:

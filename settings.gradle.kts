@@ -23,8 +23,8 @@ rootProject.name = "melown"
 
 include(
     ":services:catalog",
-    ":services:identity",
-    ":services:api-gateway",
+    //":services:identity",
+    //":services:api-gateway",
     ":contracts-catalog",
 )
 project(":contracts-catalog").projectDir = file("contracts/catalog")

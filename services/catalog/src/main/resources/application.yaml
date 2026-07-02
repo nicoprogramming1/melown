@@ -1,13 +1,19 @@
 spring:
   application:
     name: catalog
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalog # si no usamos docker que mapee a localhost, sino vien del .env con catalog-db para red interna
+    username: root
+    password: root
 
-grpc:
   server:
-    port: 9090
-    # opcional: si querés ver detalles en los logs
-    enable-keep-alive: true
+    port: 8080
 
-catalog:
-  policy:
-    draftTTL: P2D
+  grpc:
+    server:
+      port: 9090
+      enable-keep-alive: true
+
+  catalog:
+    policy:
+      draft-ttl: P2D
