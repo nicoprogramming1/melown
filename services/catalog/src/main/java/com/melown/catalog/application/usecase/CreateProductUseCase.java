@@ -28,8 +28,9 @@ public class CreateProductUseCase {
     }
 
     public CreateProductResult handle(CreateProductCommandKind createProductCommandKind) {
-        Instant expiredDraftDate = Instant.now(clock.now()).plus(policy.draftTtl());
-        Product product = ProductConstructor.build(createProductCommandKind, expiredDraftDate);
+        Instant now = clock.now();
+        Instant expiredDraftDate = now.plus(policy.draftTtl());
+        Product product = ProductConstructor.build(createProductCommandKind, expiredDraftDate, now);
         ProductId savedProductId = repository.save(product.toSnapshot());
         return ProductMapper.toResultCreate(savedProductId);
     }
