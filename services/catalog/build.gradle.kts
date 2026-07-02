@@ -25,4 +25,7 @@ dependencies {
 
     // Stubs generados desde los .proto de contracts/catalog
     implementation(project(":contracts-catalog"))
+
+    // autocompletado
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }

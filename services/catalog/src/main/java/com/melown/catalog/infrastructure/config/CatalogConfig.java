@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class CatalogConfig {
 
     @Bean
-    public static CatalogPolicy catalogPolicy(CatalogProperties props) {
-        return new CatalogPolicy(props.draftTTL());
+    public CatalogPolicy catalogPolicy(CatalogProperties props) {
+        return new CatalogPolicy(props.draftTtl());
     }
 }

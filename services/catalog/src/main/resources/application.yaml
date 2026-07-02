@@ -14,6 +14,6 @@ spring:
       port: 9090
       enable-keep-alive: true
 
-  catalog:
-    policy:
-      draft-ttl: P2D
+catalog:
+  policy:
+    draft-ttl: P2D
