@@ -6,16 +6,12 @@ import com.melown.catalog.domain.model.Specifications;
 import com.melown.catalog.domain.model.condition.ProductCondition;
 import com.melown.catalog.domain.model.status.ProductStatus;
 
-import java.time.Instant;
-import java.util.UUID;
-
 public record ProductSnapshot(
-        ProductId id,
-        String title,
-        String description,
-        Specifications specifications,
-        ProductId vendorId,
-        ProductCondition productCondition, // ← sealed, tipo rico
-        ProductStatus productStatus, // ← sealed, tipo rico
-        Auditory auditory) {
-}
+    ProductId id,
+    String title,
+    String description,
+    Specifications specifications,
+    ProductId vendorId,
+    ProductCondition productCondition, // ← sealed, tipo rico
+    ProductStatus productStatus, // ← sealed, tipo rico
+    Auditory auditory) {}

@@ -9,9 +9,10 @@ import com.melown.catalog.domain.policy.CatalogPolicy;
 import com.melown.catalog.infrastructure.adapter.out.dto.CreateProductResult;
 import com.melown.catalog.infrastructure.adapter.out.persistence.mappers.ProductMapper;
 import com.melown.catalog.infrastructure.config.ClockConfig;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class CreateProductUseCase {
@@ -20,19 +21,15 @@ public class CreateProductUseCase {
     private final ClockConfig clock;
     private final CatalogPolicy policy;
 
-    CreateProductUseCase(
-            ProductRepository repository,
-            ClockConfig clock,
-            CatalogPolicy policy
-    ) {
+    CreateProductUseCase(ProductRepository repository, ClockConfig clock, CatalogPolicy policy) {
         this.repository = repository;
         this.clock = clock;
         this.policy = policy;
     }
 
     public CreateProductResult handle(CreateProductCommandKind createProductCommandKind) {
-        Instant expiredDraftDate = Instant.now(clock.now()).plus(policy.draftTTL());
-        Product product = ProductConstructor.build(createProductCommandKind, clock.now(), expiredDraftDate);
+        Instant expiredDraftDate = Instant.now(clock.now()).plus(policy.draftTtl());
+        Product product = ProductConstructor.build(createProductCommandKind, expiredDraftDate);
         ProductId savedProductId = repository.save(product.toSnapshot());
         return ProductMapper.toResultCreate(savedProductId);
     }

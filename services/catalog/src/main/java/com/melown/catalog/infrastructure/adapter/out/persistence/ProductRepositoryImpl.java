@@ -8,27 +8,25 @@ import com.melown.catalog.infrastructure.adapter.out.persistence.entities.Produc
 import com.melown.catalog.infrastructure.adapter.out.persistence.mappers.ProductMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
-    private final ProductJPARepository productJPARepository;
+  private final ProductJPARepository productJPARepository;
 
-    ProductRepositoryImpl(ProductJPARepository productJPARepository) {
-        this.productJPARepository = productJPARepository;
-    }
+  ProductRepositoryImpl(ProductJPARepository productJPARepository) {
+    this.productJPARepository = productJPARepository;
+  }
 
-    @Override
-    public ProductId save(ProductSnapshot snapshot) {
-        ProductEntity productEntity = ProductMapper.toEntity(snapshot);
-        ProductEntity savedEntity = productJPARepository.save(productEntity);
-        return ProductMapper.toProductId(savedEntity.getId());
-    }
+  @Override
+  public ProductId save(ProductSnapshot snapshot) {
+    ProductEntity productEntity = ProductMapper.toEntity(snapshot);
+    ProductEntity savedEntity = productJPARepository.save(productEntity);
+    return ProductMapper.toProductId(savedEntity.getId());
+  }
 
-    @Override
-    public Product retrieve(ProductId publicId) {
-        ProductEntity entity = productJPARepository.findByPublicId(publicId.value()).orElseThrow();
-        return ProductMapper.toDomain(entity);
-    }
+  @Override
+  public Product retrieve(ProductId publicId) {
+    ProductEntity entity = productJPARepository.findByPublicId(publicId.value()).orElseThrow();
+    return ProductMapper.toDomain(entity);
+  }
 }

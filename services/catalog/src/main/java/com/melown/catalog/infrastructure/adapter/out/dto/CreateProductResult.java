@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateProductResult {
-    ProductId id;
+  ProductId id;
 }

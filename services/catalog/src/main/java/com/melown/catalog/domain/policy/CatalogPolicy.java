@@ -3,10 +3,10 @@ package com.melown.catalog.domain.policy;
 import java.time.Duration;
 import java.util.Objects;
 
-public record CatalogPolicy(Duration draftTTL) {
-    public CatalogPolicy {
-        Objects.requireNonNull(draftTTL, "El draftTTL es null");
-        if (draftTTL.isNegative() | draftTTL.isZero())
-            throw new IllegalArgumentException("La duración del draft debe ser mayor a cero");
-    }
+public record CatalogPolicy(Duration draftTtl) {
+  public CatalogPolicy {
+    Objects.requireNonNull(draftTtl, "El draftTtl es null");
+    if (draftTtl.isNegative() || draftTtl.isZero())
+      throw new IllegalArgumentException("La duración del draft debe ser mayor a cero");
+  }
 }

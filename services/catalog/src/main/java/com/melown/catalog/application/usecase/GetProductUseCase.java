@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetProductUseCase {
 
-    private final ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
-    GetProductUseCase(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+  GetProductUseCase(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+  }
 
-    public GetProductResult handle(GetProductQuery request) {
-        Product product = productRepository.retrieve(ProductMapper.toProductId(request.id()));
-        ProductSnapshot snapshot = product.toSnapshot();
-        return ProductMapper.toResultGet(snapshot);
-    }
+  public GetProductResult handle(GetProductQuery request) {
+    Product product = productRepository.retrieve(ProductMapper.toProductId(request.id()));
+    ProductSnapshot snapshot = product.toSnapshot();
+    return ProductMapper.toResultGet(snapshot);
+  }
 }

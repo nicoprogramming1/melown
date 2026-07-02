@@ -4,11 +4,9 @@ import com.melown.catalog.domain.model.enums.ConditionGrade;
 import com.melown.catalog.domain.model.enums.ConditionKind;
 import com.melown.catalog.domain.model.enums.ProductStatusKind;
 import jakarta.persistence.*;
-
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,68 +25,65 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 public class ProductEntity {
 
-    @Id
-    @GeneratedValue
-    @UuidGenerator(style = UuidGenerator.Style.TIME) // UUID v7-like (time-based)
-    private UUID id;
+  @Id
+  @GeneratedValue
+  @UuidGenerator(style = UuidGenerator.Style.TIME) // UUID v7-like (time-based)
+  private UUID id;
 
-    @Column(name = "public_id", unique = true, nullable = false)
-    UUID publicId;
+  @Column(name = "public_id", unique = true, nullable = false)
+  UUID publicId;
 
-    String title;
+  String title;
 
-    String description;
+  String description;
 
-    @JdbcTypeCode(SqlTypes.JSON) // ← Hibernate 6 lo mapea a JSONB
-    @Column(columnDefinition = "jsonb")
-    private Map<String, String> specifications;
+  @JdbcTypeCode(SqlTypes.JSON) // ← Hibernate 6 lo mapea a JSONB
+  @Column(columnDefinition = "jsonb")
+  private Map<String, String> specifications;
 
-    @Column(name = "vendor_id")
-    UUID vendorId;
+  @Column(name = "vendor_id")
+  UUID vendorId;
 
-    // used condition
-    @Column(name = "used_description")
-    String usedDescription;
+  // used condition
+  @Column(name = "used_description")
+  String usedDescription;
 
-    @Column(name = "used_condition_grade")
-    @Enumerated(EnumType.STRING)
-    ConditionGrade usedConditionGrade;
+  @Column(name = "used_condition_grade")
+  @Enumerated(EnumType.STRING)
+  ConditionGrade usedConditionGrade;
 
-    // new condition
-    boolean guarantee;
+  // new condition
+  boolean guarantee;
 
-    // drafted
-    @Column(name = "expiration_at")
-    Instant expirationAt;
+  // drafted
+  @Column(name = "expiration_at")
+  Instant expirationAt;
 
-    // published
-    @Column(name = "published_at")
-    Instant publishedAt;
+  // published
+  @Column(name = "published_at")
+  Instant publishedAt;
 
-    // paused
-    @Column(name = "paused_by")
-    UUID pausedBy;
+  // paused
+  @Column(name = "paused_by")
+  UUID pausedBy;
 
-    // archived
-    @Column(name = "archived_at")
-    Instant archivedAt;
+  // archived
+  @Column(name = "archived_at")
+  Instant archivedAt;
 
-    String reason;
+  String reason;
 
-    @Version
-    Long version;
+  @Version Long version;
 
-    @Column(name = "status_kind")
-    @Enumerated(EnumType.STRING)
-    ProductStatusKind statusKind; //   'DRAFTED' | 'PUBLISHED' | 'PAUSED' | 'ARCHIVED'
+  @Column(name = "status_kind")
+  @Enumerated(EnumType.STRING)
+  ProductStatusKind statusKind; //   'DRAFTED' | 'PUBLISHED' | 'PAUSED' | 'ARCHIVED'
 
-    @Column(name = "condition_kind")
-    @Enumerated(EnumType.STRING)
-    ConditionKind conditionKind; // 'NEW' | 'USED'
+  @Column(name = "condition_kind")
+  @Enumerated(EnumType.STRING)
+  ConditionKind conditionKind; // 'NEW' | 'USED'
 
-    @CreatedDate
-    Instant createdAt;
+  @CreatedDate Instant createdAt;
 
-    @LastModifiedDate
-    Instant updatedAt;
+  @LastModifiedDate Instant updatedAt;
 }
